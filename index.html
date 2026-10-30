@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARS JAYA FARM - Nila Marinasi, Ayam Marinasi & Lombok Tumis</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ocean: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        },
+                        navy: {
+                            800: '#0f172a',
+                            900: '#0b1329',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(12, 74, 110, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #082f49 0%, #0c4a6e 50%, #0284c7 100%);
+        }
+        
+        /* Subtle Swimming Fish Animation Effects */
+        @keyframes swimRight {
+            0% { transform: translateX(-100px) translateY(0px) scale(0.8) rotate(2deg); opacity: 0.15; }
+            50% { transform: translateX(50vw) translateY(-15px) scale(0.85) rotate(-2deg); opacity: 0.25; }
+            100% { transform: translateX(110vw) translateY(0px) scale(0.8) rotate(2deg); opacity: 0.15; }
+        }
+        @keyframes floatBob {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .fish-anim-1 {
+            position: absolute;
+            top: 25%;
+            left: 0;
+            animation: swimRight 28s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .fish-anim-2 {
+            position: absolute;
+            bottom: 15%;
+            left: 0;
+            animation: swimRight 36s linear infinite 10s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .bobbing-badge {
+            animation: floatBob 4s ease-in-out infinite;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(2, 132, 199, 0.15), 0 8px 10px -6px rgba(2, 132, 199, 0.1);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0ea5e9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-ocean-700/50 text-white transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="images/logo.jpeg"
+                        alt="Logo Ars Jaya Farm"
+                        class="w-11 h-11 object-contain rounded-full bg-white p-1">
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-white to-cyan-300 bg-clip-text text-transparent block">ARS JAYA FARM</span>
+                        <span class="text-[9px] tracking-widest text-amber-300 uppercase font-bold block -mt-1">Quality Fish • Healthy Farm • Best Result</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-200">
+                    <a href="#beranda" class="hover:text-cyan-300 transition-colors">Beranda</a>
+                    <a href="#katalog" class="hover:text-cyan-300 transition-colors">Katalog Produk</a>
+                    <a href="#keunggulan" class="hover:text-cyan-300 transition-colors">Keunggulan</a>
+                    <a href="#cara-pesan" class="hover:text-cyan-300 transition-colors">Cara Pemesanan</a>
+                    <a href="#kontak" class="hover:text-cyan-300 transition-colors">Kontak</a>
+                </nav>
+
+                <!-- Cart Button & CTA -->
+                <div class="flex items-center gap-4">
+                    <button id="cartToggleBtn" onclick="toggleCartDrawer()" class="relative p-2.5 rounded-xl bg-ocean-800/80 hover:bg-ocean-700 text-cyan-200 transition-all border border-ocean-600/50">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cartBadge" class="hidden absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-ocean-900 animate-pulse">0</span>
+                    </button>
+                    <a href="#katalog" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-ocean-600 hover:from-cyan-400 hover:to-ocean-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-md shadow-cyan-500/20 transition-all text-sm">
+                        <i class="fa-solid fa-store"></i> Pesan Sekarang
+                    </a>
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-slate-200 hover:text-white p-2">
+                        <i id="menuIcon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-ocean-900/95 border-b border-ocean-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#beranda" onclick="toggleMobileMenu()" class="block py-2 text-slate-200 hover:text-cyan-300 font-medium">Beranda</a>
+            <a href="#katalog" onclick="toggleMobileMenu()" class="block py-2 text-slate-200 hover:text-cyan-300 font-medium">Katalog Produk</a>
+            <a href="#keunggulan" onclick="toggleMobileMenu()" class="block py-2 text-slate-200 hover:text-cyan-300 font-medium">Keunggulan</a>
+            <a href="#cara-pesan" onclick="toggleMobileMenu()" class="block py-2 text-slate-200 hover:text-cyan-300 font-medium">Cara Pemesanan</a>
+            <a href="#kontak" onclick="toggleMobileMenu()" class="block py-2 text-slate-200 hover:text-cyan-300 font-medium">Kontak</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="beranda" class="relative pt-32 pb-20 md:pt-40 md:pb-28 hero-gradient text-white overflow-hidden">
+        <!-- Decorative Waves & Subtle Swimming Fish Animations -->
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="absolute -bottom-10 -right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute top-20 -left-10 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
+
+        <!-- Subtle Animated Fish Background Layer -->
+        <div class="fish-anim-1 text-cyan-300/20 text-5xl">
+            <i class="fa-solid fa-fish-fins"></i>
+        </div>
+        <div class="fish-anim-2 text-amber-300/20 text-4xl">
+            <i class="fa-solid fa-fish"></i>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold backdrop-blur-md">
+                        <i class="fa-solid fa-leaf text-emerald-400"></i>
+                        TANPA PENGAWET • Praktis & Higienis • Siap Panggang/Goreng
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                        ARS JAYA FARM <br>
+                        <span class="bg-gradient-to-r from-amber-300 via-cyan-200 to-white bg-clip-text text-transparent">IKAN MARINASI ENAK!</span>
+                    </h1>
+                    <p class="text-amber-200 font-semibold text-sm sm:text-base tracking-wide">
+                        "Bumbu Meresap, Rasa Juara! Dari Kolam Terbaik, untuk Keluarga Tercinta ❤️"
+                    </p>
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Olahan Ikan Nila Marinasi & Fresh, Ayam Ungkep Rempah, dan Sambal Lombok Tumis khas Ars Jaya Farm. Tinggal masak 10 menit, siap disajikan!
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#katalog" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/30 hover:scale-105 transition-all text-base">
+                            <i class="fa-solid fa-utensils"></i> Lihat Katalog Produk
+                        </a>
+                        <a href="#cara-pesan" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-ocean-800/80 hover:bg-ocean-700/80 text-white font-semibold px-6 py-4 rounded-xl border border-ocean-600/50 backdrop-blur-md transition-all text-base">
+                            <i class="fa-solid fa-circle-question text-cyan-400"></i> Cara Pemesanan
+                        </a>
+                    </div>
+                    <!-- Stats / Badges -->
+                    <div class="pt-6 grid grid-cols-3 gap-4 border-t border-ocean-700/60 max-w-lg mx-auto lg:mx-0 text-center">
+                        <div>
+                            <p class="text-xl sm:text-2xl font-bold text-amber-300"><i class="fa-solid fa-shield-halved text-emerald-400"></i> 100%</p>
+                            <p class="text-xs text-slate-300">Tanpa Pengawet</p>
+                        </div>
+                        <div>
+                            <p class="text-xl sm:text-2xl font-bold text-cyan-300"><i class="fa-solid fa-box text-cyan-300"></i> Vacuum</p>
+                            <p class="text-xs text-slate-300">Kemasan Higienis</p>
+                        </div>
+                        <div>
+                            <p class="text-xl sm:text-2xl font-bold text-amber-300">4.9/5</p>
+                            <p class="text-xs text-slate-300">Rating Konsumen</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Graphic Banner Showcase -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-amber-500 to-cyan-500 rounded-3xl transform rotate-3 scale-105 opacity-40 blur-lg"></div>
+                        <div class="relative bg-ocean-900/90 border border-amber-500/30 p-4 rounded-3xl shadow-2xl backdrop-blur-md">
+                            <div class="relative overflow-hidden rounded-2xl h-80 sm:h-96 bg-slate-800">
+                                <img src="images/ikan-marinasi.jpeg" alt="Nila Marinasi Ars Jaya Farm" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-ocean-950/95 via-transparent to-transparent flex flex-col justify-end p-6">
+                                    <span class="bobbing-badge bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-extrabold text-xs px-3 py-1 rounded-full w-max mb-2 shadow-md">
+                                        <i class="fa-solid fa-fire"></i> Bumbu Meresap, Rasa Juara!
+                                    </span>
+                                    <h3 class="text-xl font-extrabold text-white">Nila Marinasi Fresh Vacuum</h3>
+                                    <p class="text-xs text-cyan-200 mt-1">Praktis • Bumbu Rempah Pilihan • Siap Masak</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KEUNGGULAN SECTION -->
+    <section id="keunggulan" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-xs font-extrabold text-ocean-600 uppercase tracking-widest">Mengapa Ars Jaya Farm?</h2>
+                <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Keunggulan Produk Kami</p>
+                <div class="w-16 h-1 bg-cyan-500 mx-auto mt-3 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Point 1 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-cyan-200 transition-all card-hover group">
+                    <div class="w-14 h-14 rounded-2xl bg-ocean-100 text-ocean-600 flex items-center justify-center text-2xl mb-5 group-hover:bg-ocean-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-fish"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Bahan Fresh Pilihan</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Ikan nila dan ayam segar pilihan yang diproses secara higienis setiap hari demi menjaga kualitas.</p>
+                </div>
+
+                <!-- Point 2 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-cyan-200 transition-all card-hover group">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-2xl mb-5 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-pepper-hot"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Bumbu Meresap Alami</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Marinasi bumbu rempah alami pilihan yang meresap hingga ke dalam daging, tanpa pengawet buatan.</p>
+                </div>
+
+                <!-- Point 3 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-cyan-200 transition-all card-hover group">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-fire-burner"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Lombok Tumis Khas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Pilihan Sambal Lombok Tumis khas Ars Jaya Farm dengan pedas gurih nagih pendamping lauk Anda.</p>
+                </div>
+
+                <!-- Point 4 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-cyan-200 transition-all card-hover group">
+                    <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-5 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Kemasan Pratis Vacuum</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Dikemas rapat dan rapi sehingga mudah disimpan di freezer dan awet untuk stok lauk rumah tangga.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KATALOG PRODUK SECTION -->
+    <section id="katalog" class="py-16 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="text-xs font-extrabold text-ocean-600 uppercase tracking-widest">Menu Unggulan</h2>
+                    <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Katalog ARS JAYA FARM</p>
+                </div>
+
+                <!-- Filter Categories -->
+                <div class="flex flex-wrap gap-2" id="filterContainer">
+                    <button onclick="filterProducts('all')" class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-ocean-700 text-white shadow-md">Semua</button>
+                    <button onclick="filterProducts('nila')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-600 hover:bg-ocean-50 hover:text-ocean-700 transition-all border border-slate-200">Nila Marinasi / Fresh</button>
+                    <button onclick="filterProducts('ayam')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-600 hover:bg-ocean-50 hover:text-ocean-700 transition-all border border-slate-200">Ayam Marinasi</button>
+                    <button onclick="filterProducts('lombok')" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-600 hover:bg-ocean-50 hover:text-ocean-700 transition-all border border-slate-200">Lombok Tumis</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="productGrid">
+                <!-- Products dynamically inserted via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CARA PEMESANAN SECTION -->
+    <section id="cara-pesan" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <h2 class="text-xs font-extrabold text-ocean-600 uppercase tracking-widest">Alur Belanja</h2>
+                <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Langkah Mudah Pemesanan</p>
+                <p class="text-slate-600 text-sm mt-2">Pesan ikan marinasi praktis langsung terhubung ke WhatsApp kami.</p>
+                <div class="w-16 h-1 bg-cyan-500 mx-auto mt-3 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-6 text-center relative">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-ocean-700 text-white font-extrabold text-xl flex items-center justify-center shadow-lg shadow-ocean-700/20 mb-4 relative z-10">
+                        1
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-1">Pilih Produk</h4>
+                    <p class="text-xs text-slate-500">Pilih ikan marinasi favorit dari katalog kami.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-ocean-700 text-white font-extrabold text-xl flex items-center justify-center shadow-lg shadow-ocean-700/20 mb-4 relative z-10">
+                        2
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-1">Atur Keranjang</h4>
+                    <p class="text-xs text-slate-500">Cek jumlah porsi & detail total belanjaan Anda.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-600 text-white font-extrabold text-xl flex items-center justify-center shadow-lg shadow-emerald-600/20 mb-4 relative z-10">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-1">Klik Checkout WA</h4>
+                    <p class="text-xs text-slate-500">Sistem otomatis buat format pesan WhatsApp.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-ocean-700 text-white font-extrabold text-xl flex items-center justify-center shadow-lg shadow-ocean-700/20 mb-4 relative z-10">
+                        4
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-1">Konfirmasi & Bayar</h4>
+                    <p class="text-xs text-slate-500">Isi alamat pengiriman & lakukan pembayaran.</p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-2xl bg-cyan-500 text-slate-950 font-extrabold text-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 mb-4 relative z-10">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-base mb-1">Pengiriman</h4>
+                    <p class="text-xs text-slate-500">Ikan marinasi dikirim segar dengan Ice Pack.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL / CALLOUT BANNER -->
+    <section class="py-12 bg-gradient-to-r from-ocean-900 via-ocean-800 to-navy-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+            <i class="fa-solid fa-quote-left text-4xl text-cyan-400 mb-4 opacity-80"></i>
+            <p class="text-lg sm:text-xl font-medium max-w-3xl text-slate-200 italic">
+                "Praktis banget buat stok lauk di rumah! Bumbu kuning bandengnya bener-bener meresap dan gak amis sama sekali. Tinggal goreng 10 menit siap disajikan."
+            </p>
+            <div class="mt-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-cyan-400 text-ocean-950 font-bold flex items-center justify-center text-sm">
+                    BR
+                </div>
+                <div class="text-left">
+                    <p class="text-sm font-bold text-white">Ibu Budi Rahmawati</p>
+                    <p class="text-xs text-cyan-300">Pelanggan Setia - Ibu Rumah Tangga</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER & KONTAK -->
+    <footer id="kontak" class="bg-navy-800 text-slate-300 pt-16 pb-8 border-t border-ocean-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500 flex items-center justify-center text-slate-950 font-bold">
+                            <i class="fa-solid fa-store text-lg"></i>
+                        </div>
+                        <span class="text-lg font-extrabold text-white">ARS JAYA FARM</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        UMKM Penyedia Nila Marinasi/Fresh, Ayam Marinasi Bumbu Ungkep Rempah, dan Lombok Tumis Khas yang lezat, segar, dan praktis.
+                    </p>
+                    <div class="flex gap-3 text-sm">
+                        <a href="https://instagram.com/arsjaya.id" target="_blank" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/6281251837567" target="_blank" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 flex items-center justify-center transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Jam Operasional -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 border-l-2 border-cyan-400 pl-3">Jam Operasional</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex justify-between"><span>Senin - Sabtu:</span> <span class="text-slate-200">08.00 - 18.00 WITA</span></li>
+                        <li class="flex justify-between"><span>Minggu / Libur:</span> <span class="text-cyan-400 font-semibold">Tutup (Online WA)</span></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Alamat & Kontak -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 border-l-2 border-cyan-400 pl-3">Hubungi Kami</h4>
+                    <ul class="space-y-3 text-xs text-slate-400">
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-location-dot text-cyan-400 mt-0.5"></i>
+                            <span>Jl. Andi Haseng No. 9</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-phone text-cyan-400"></i>
+                            <span>+62 812-5183-7567</span>
+                        </li>
+                        <li class="flex items-center gap-2.5">
+                            <i class="fa-brands fa-instagram text-cyan-400"></i>
+                            <span>@arsjaya.id</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Pengiriman -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 border-l-2 border-cyan-400 pl-3">Layanan Pengiriman</h4>
+                    <p class="text-xs text-slate-400 mb-3">
+                        Pengiriman cepat & aman area sekitar dengan kemasan higienis terjaga.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-300">
+                        <span class="px-2.5 py-1 bg-slate-800 rounded">Kurir Lokal</span>
+                        <span class="px-2.5 py-1 bg-slate-800 rounded">Takeaway / Pick Up</span>
+                        <span class="px-2.5 py-1 bg-slate-800 rounded">Same Day</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright -->
+            <div class="pt-8 text-center text-xs text-slate-500">
+                &copy; 2026 ARS JAYA FARM. Dari Kolam Terbaik, untuk Keluarga Tercinta ❤️
+            </div>
+        </div>
+    </footer>
+
+    <!-- CART DRAWER / MODAL KERANJANG -->
+    <div id="cartDrawerOverlay" onclick="toggleCartDrawer()" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 transition-opacity"></div>
+    <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-4 bg-ocean-900 text-white flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-cart-shopping text-cyan-400"></i>
+                <h3 class="font-bold text-base">Keranjang Belanja</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="p-1 hover:text-cyan-300 text-slate-300">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Body: Cart Items -->
+        <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Empty state default -->
+            <div id="emptyCartState" class="text-center py-12">
+                <i class="fa-solid fa-basket-shopping text-5xl text-slate-300 mb-3"></i>
+                <p class="text-slate-500 font-medium text-sm">Keranjang Anda masih kosong.</p>
+                <button onclick="toggleCartDrawer()" class="mt-4 text-xs font-bold text-ocean-600 hover:text-ocean-800">
+                    + Pilih Produk Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- Checkout Form & Summary -->
+        <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">Nama Lengkap</label>
+                <input type="text" id="buyerName" placeholder="Contoh: Budi Santoso" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 outline-none">
+            </div>
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">Alamat Lengkap Pengiriman</label>
+                <textarea id="buyerAddress" rows="2" placeholder="Jl. Mawar No. 12, RT 01/02..." class="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 outline-none"></textarea>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200">
+                <div class="flex justify-between items-center font-bold text-slate-900 text-sm mb-3">
+                    <span>Total Estimasi:</span>
+                    <span id="cartTotalPrice" class="text-ocean-700 text-lg">Rp 0</span>
+                </div>
+                <button onclick="checkoutToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Pesan Sekarang via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT JAVASCRIPT LOGIC -->
+    <script>
+        // DATA KATALOG PRODUK ARS JAYA FARM
+        const products = [
+            {
+                id: 1,
+                name: "Nila Marinasi Bumbu Kuning",
+                category: "nila",
+                price: 28000,
+                weight: "1 Pack (± 400g)",
+                rating: 4.9,
+                badge: "Best Seller",
+                image: "images/ikan-marinasi.jpeg",
+                desc: "Ikan Nila segar marinasi bumbu kuning kunyit & rempah alami khas Ars Jaya Farm. Siap dimasak!"
+            },
+            {
+                id: 2,
+                name: "Nila Fresh Segar (Tanpa Bumbu)",
+                category: "nila",
+                price: 25000,
+                weight: "1 Ekor / Pack (± 450g)",
+                rating: 4.8,
+                badge: "Segar",
+                image: "images/ikan-marinasi.jpeg",
+                desc: "Ikan Nila segar pilihan yang sudah dibersihkan sisik dan isi perutnya, siap diolah sesuai selera."
+            },
+            {
+                id: 3,
+                name: "Nila Marinasi Pedas Manis",
+                category: "nila",
+                price: 30000,
+                weight: "1 Pack (± 400g)",
+                rating: 4.9,
+                badge: "Favorit",
+                image: "images/ikan-marinasi.jpeg",
+                desc: "Daging nila marinasi dengan olesan bumbu pedas manis melimpah yang meresap sempurna."
+            },
+            {
+                id: 4,
+                name: "Ayam Marinasi Ungkep Rempah",
+                category: "ayam",
+                price: 35000,
+                weight: "1 Pack (± 500g)",
+                rating: 4.9,
+                badge: "Ungkup Rempah",
+                image: "images/ayam-marinasi.jpeg",
+                desc: "Potongan ayam pilihan yang sudah dimarinasi bumbu ungkep rempah gurih, empuk, & siap goreng."
+            },
+            {
+                id: 5,
+                name: "Ayam Marinasi Pedas Manis / BBQ",
+                category: "ayam",
+                price: 38000,
+                weight: "1 Pack (± 500g)",
+                rating: 4.8,
+                badge: "Spesial Barbeque",
+                image: "images/ayam-marinasi.jpeg",
+                desc: "Ayam marinasi dengan saus racikan spesial pedas gurih, pas untuk dibakar maupun digoreng."
+            },
+            {
+                id: 6,
+                name: "Lombok Tumis Khas Ars Jaya",
+                category: "lombok",
+                price: 20000,
+                weight: "1 Botol/Jar (150g)",
+                rating: 5.0,
+                badge: "Must Try",
+                image: "images/lombok-tumis.jpeg",
+                desc: "Sambal lombok tumis khas racikan resep ARS JAYA FARM. Pedas, gurih, harum dan bikin nagih."
+            },
+            {
+                id: 7,
+                name: "Lombok Tumis Extra Pedas",
+                category: "lombok",
+                price: 22000,
+                weight: "1 Botol/Jar (150g)",
+                rating: 4.9,
+                badge: "Super Pedas",
+                image: "images/lombok-tumis.jpeg",
+                desc: "Olahan cabai pilihan yang ditumis matang sempurna dengan tingkat kepedasan ekstra."
+            }
+        ];
+
+        // CART STATE
+        let cart = [];
+
+        // RENDER PRODUCTS TO GRID
+        function renderProducts(items) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm card-hover flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-slate-200">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 left-3 bg-ocean-900/80 backdrop-blur-md text-cyan-300 text-[11px] font-bold px-3 py-1 rounded-full border border-ocean-700">
+                                ${product.badge}
+                            </span>
+                            <span class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-bold px-2.5 py-1 rounded-lg shadow">
+                                <i class="fa-solid fa-weight-hanging text-ocean-600"></i> ${product.weight}
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                                <span class="capitalize font-semibold text-ocean-600">${product.category}</span>
+                                <span class="flex items-center gap-1 text-amber-500 font-bold"><i class="fa-solid fa-star"></i> ${product.rating}</span>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-base mb-2 hover:text-ocean-600 transition-colors">${product.name}</h3>
+                            <p class="text-xs text-slate-600 line-clamp-2 mb-4">${product.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 mt-auto flex items-center justify-between border-t border-slate-100">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-semibold uppercase">Harga</span>
+                            <span class="text-lg font-extrabold text-slate-900">Rp ${product.price.toLocaleString('id-ID')}</span>
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="bg-ocean-600 hover:bg-ocean-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-md shadow-ocean-600/20 active:scale-95">
+                            <i class="fa-solid fa-plus"></i> Tambah
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // FILTER PRODUCTS
+        function filterProducts(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.className = 'filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-600 hover:bg-ocean-50 hover:text-ocean-700 transition-all border border-slate-200';
+            });
+            event.target.className = 'filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-ocean-700 text-white shadow-md';
+
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // ADD TO CART
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            toggleCartDrawer(true);
+        }
+
+        // UPDATE CART QUANTITY
+        function updateQty(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        // UPDATE CART UI & TOTAL
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const badge = document.getElementById('cartBadge');
+            const totalEl = document.getElementById('cartTotalPrice');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            totalEl.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div id="emptyCartState" class="text-center py-12">
+                        <i class="fa-solid fa-basket-shopping text-5xl text-slate-300 mb-3"></i>
+                        <p class="text-slate-500 font-medium text-sm">Keranjang Anda masih kosong.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            cart.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200';
+                itemEl.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover">
+                        <div>
+                            <h4 class="font-bold text-xs text-slate-800 line-clamp-1">${item.name}</h4>
+                            <p class="text-[11px] font-semibold text-ocean-700">Rp ${item.price.toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="updateQty(${item.id}, -1)" class="w-6 h-6 rounded-md bg-slate-200 hover:bg-slate-300 font-bold text-slate-700 text-xs flex items-center justify-center">-</button>
+                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button onclick="updateQty(${item.id}, 1)" class="w-6 h-6 rounded-md bg-ocean-600 hover:bg-ocean-700 font-bold text-white text-xs flex items-center justify-center">+</button>
+                    </div>
+                `;
+                container.appendChild(itemEl);
+            });
+        }
+
+        // TOGGLE CART DRAWER
+        function toggleCartDrawer(openOnly = false) {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartDrawerOverlay');
+
+            if (openOnly) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                return;
+            }
+
+            drawer.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // MOBILE MENU TOGGLE
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // CHECKOUT TO WHATSAPP DIRECT FORMATTING FOR ARS JAYA FARM
+        function checkoutToWhatsApp() {
+            if (cart.length === 0) {
+                alert('Keranjang Anda masih kosong! Silakan pilih produk terlebih dahulu.');
+                return;
+            }
+
+            const name = document.getElementById('buyerName').value.trim();
+            const address = document.getElementById('buyerAddress').value.trim();
+
+            if (!name || !address) {
+                alert('Harap isi Nama Lengkap dan Alamat Pengiriman Anda.');
+                return;
+            }
+
+            // Nomor WhatsApp Resmi Ars Jaya Farm (+62 812-5183-7567)
+            const phoneNumber = "6281251837567"; 
+            let total = 0;
+
+            let message = `Halo *ARS JAYA FARM*, saya ingin memesan:\n\n`;
+            message += `*RINCIAN PESANAN:*\n`;
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                message += `${index + 1}. ${item.name} (${item.qty}x) = Rp ${subtotal.toLocaleString('id-ID')}\n`;
+            });
+
+            message += `\n*TOTAL PESANAN:* Rp ${total.toLocaleString('id-ID')}\n\n`;
+            message += `*DATA PEMBELI:*\n`;
+            message += `- Nama: ${name}\n`;
+            message += `- Alamat Pengiriman: ${address}\n\n`;
+            message += `Mohon konfirmasi pesanan dan ketersediaan stok. Terima kasih!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+        }
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            renderProducts(products);
+        }
+    </script>
+</body>
+</html>
